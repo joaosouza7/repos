@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { RxGithubLogo, RxPlus } from "react-icons/rx";
 import { ImSpinner } from "react-icons/im";
 import { FiTrash, FiArrowRightCircle } from "react-icons/fi";
@@ -114,9 +115,9 @@ export default function Main() {
                          
                             {repo.name}
                         </span>
-                        <a href="">
+                        <Link to={`/repository/${encodeURIComponent(repo.name)}`}>
                             <FiArrowRightCircle size={20} />
-                        </a>
+                        </Link>
                     </li>
                 ))}
             </List>
