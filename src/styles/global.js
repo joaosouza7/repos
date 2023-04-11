@@ -15,12 +15,12 @@ export default createGlobalStyle`
 
     body {
         background-color: #15171a;
-        color: #fefefe;
         font-size: 15px;
+        color: #222;
     }
 
     body, input, button {
-        color: #fefefe;
+        color: #222;
         font-size: 15px;
         font-family: 'Mulish', sans-serif;
     }
