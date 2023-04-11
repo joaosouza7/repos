@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { FiArrowLeftCircle } from "react-icons/fi";
 import { ImSpinner } from "react-icons/im";
 
-import { Container, Owner, Loading, BackButton } from "./styles";
+import { Container, Owner, Loading, BackButton, IssuesList } from "./styles";
 
 import api from "../../services/api";
 
@@ -60,6 +60,27 @@ export default function Repository() {
                 <h1>{repositorio.name}</h1>
                 <p>{repositorio.description}</p>
             </Owner>
+
+            <IssuesList>
+                {issues.map(issue => (
+                    <li key={String(issue.id)}>
+                        <img src={issue.user.avatar_url} alt={issue.user.login} />
+
+                        <div>
+                            <strong>
+                                <a href={issue.html_url}>{issue.title}</a>
+
+                                {issue.labels.map(label => (
+                                    <p key={String(label.id)}>{label.name}</p>
+                                ))}
+
+                            </strong>
+
+                            <p>{issue.user.login}</p>
+                        </div>
+                    </li>
+                ))}
+            </IssuesList>
         </Container>
     );
 }
