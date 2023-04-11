@@ -65,6 +65,25 @@ export const Owner = styled.header`
     }
 `;
 
+export const FilterList = styled.div`
+    margin: 1.3rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    button {
+        border: 0;
+        padding: .5rem .7rem;
+        border-radius: .2rem;
+        margin: 0 .4rem;
+
+        &:nth-child(${props => props.active + 1}) {
+            background: #0071db;
+            color: #FFF
+        }
+    }
+`;
+
 export const IssuesList = styled.ul`
     list-style: none;
     margin-top: 1.5rem;
@@ -125,3 +144,22 @@ export const IssuesList = styled.ul`
     }
 `;
 
+export const PageActions = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+
+    button {
+        border: 0;
+        background: none;
+
+        &:disabled {
+            cursor: not-allowed;
+            
+            svg {
+                color: #8a8787!important;
+            }
+        }
+    }
+`;

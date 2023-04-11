@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { FiArrowLeftCircle } from "react-icons/fi";
-import { ImSpinner } from "react-icons/im";
+import { ImSpinner, ImCircleLeft, ImCircleRight } from "react-icons/im";
 
-import { Container, Owner, Loading, BackButton, IssuesList } from "./styles";
+import { Container, Owner, Loading, BackButton, IssuesList, PageActions, FilterList } from "./styles";
 
 import api from "../../services/api";
 
@@ -15,6 +15,13 @@ export default function Repository() {
     const [repositorio, setRepositorio] = useState({});
     const [issues, setIssues] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [page, setPage] = useState(1);
+    const [filters, setFilters] = useState([
+        {state: 'all', label: 'Todas', active: true},
+        {state: 'open', label: 'Abertas', active: false},
+        {state: 'closed', label: 'Fechadas', active: false},
+    ]);
+    const [filterIndex, setFilterIndex] = useState(0);
 
     useEffect(() => {
 
@@ -25,7 +32,7 @@ export default function Repository() {
                 api.get(`repos/${nomeRepo}`),
                 api.get(`repos/${nomeRepo}/issues`, {
                     params: {
-                        state: 'open',
+                        state: filters.find(f => f.active).state,
                         per_page: 5
                     }
                 })
@@ -38,7 +45,33 @@ export default function Repository() {
 
         load();
 
-    }, [repository])
+    }, [repository]);
+
+    useEffect(() => {
+        async function loadIssue() {
+            const nomeRepo = repository;
+
+            const response = await api.get(`/repos/${nomeRepo}/issues`, {
+                params: {
+                    state: filters[filterIndex].state,
+                    page,
+                    per_page: 5
+                },
+            });
+
+            setIssues(response.data);
+        }
+
+        loadIssue();
+    }, [filterIndex, filters, repository, page])
+
+    function handlePage(action) {
+        setPage(action === 'back' ? page - 1 : page + 1 );
+    }
+
+    function handleFilter(index) {
+        setFilterIndex(index);
+    }
 
     if(loading) {
         return (
@@ -61,6 +94,14 @@ export default function Repository() {
                 <p>{repositorio.description}</p>
             </Owner>
 
+            <FilterList active={filterIndex}>
+                {filters.map((filter, index) => (
+                    <button type="button" key={filter.label} onClick={ () => handleFilter(index) }>
+                        {filter.label}
+                    </button>
+                ))}
+            </FilterList>
+
             <IssuesList>
                 {issues.map(issue => (
                     <li key={String(issue.id)}>
@@ -81,6 +122,16 @@ export default function Repository() {
                     </li>
                 ))}
             </IssuesList>
+
+            <PageActions>
+                <button type="button" onClick={() => handlePage('back') } disabled={page < 2}>
+                    <ImCircleLeft size={20} color="#000" />
+                </button>
+
+                <button type="button" onClick={() => handlePage('next') }>
+                    <ImCircleRight size={20} color="#000" />
+                </button>
+            </PageActions>
         </Container>
     );
 }
