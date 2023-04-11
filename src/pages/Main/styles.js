@@ -25,7 +25,7 @@ export const Form = styled.form`
 
     input {
         flex: 1;
-        border: 1px solid #DDD;
+        border: 1px solid ${props => (props.error ? '#e61e1e' : '#DDD') };
         border-radius: .2rem;
         padding: 10px 15px;
     }
@@ -67,4 +67,36 @@ export const SubmitButton = styled.button.attrs(props => ({
             }
         `
     }
+`;
+
+export const List = styled.ul`
+    list-style: none;
+    margin-top: 2rem;
+
+    li {
+        padding: .6rem 0;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+
+        & + li {
+            border-top: 1px solid #eee;
+        }
+
+        a {
+            color: #15171a;
+            text-decoration: none;
+        }
+    }
+`;
+
+export const DeleteButton = styled.button.attrs({
+    type: 'button'
+})`
+    background: none;
+    border: 0;
+    padding: 0 7px;
+    color: #e61e1e;
+    vertical-align: middle;
 `;
